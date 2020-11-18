@@ -1,5 +1,5 @@
 //
-//  ResgisterViewController.swift
+//  LoginViewController.swift
 //  Messenger
 //
 //  Created by Valerian   on 18/11/2020.
@@ -8,7 +8,8 @@
 import Foundation
 import UIKit
 
-class ResgisterViewController: UIViewController {
+class LoginViewController: UIViewController  {
+    
     private var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.clipsToBounds = true
@@ -17,7 +18,7 @@ class ResgisterViewController: UIViewController {
     
     private var imageView : UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(named: "register")
+        imageView.image = UIImage(named: "logo")
         imageView.contentMode = .scaleAspectFit
         return imageView
     }()
@@ -31,36 +32,6 @@ class ResgisterViewController: UIViewController {
         field.layer.borderWidth = 1
         field.layer.borderColor = UIColor.lightGray.cgColor
         field.placeholder = "Enter your email"
-        field.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 5, height: 0))
-        field.leftViewMode = .always
-        field.backgroundColor = .white
-        return field
-    }()
-    
-    private var firstNameTextField : UITextField = {
-        let field = UITextField()
-        field.autocapitalizationType = .none
-        field.autocorrectionType = .no
-        field.returnKeyType = .continue
-        field.layer.cornerRadius = 12
-        field.layer.borderWidth = 1
-        field.layer.borderColor = UIColor.lightGray.cgColor
-        field.placeholder = "Enter your first name"
-        field.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 5, height: 0))
-        field.leftViewMode = .always
-        field.backgroundColor = .white
-        return field
-    }()
-    
-    private var lastNameTextField : UITextField = {
-        let field = UITextField()
-        field.autocapitalizationType = .none
-        field.autocorrectionType = .no
-        field.returnKeyType = .continue
-        field.layer.cornerRadius = 12
-        field.layer.borderWidth = 1
-        field.layer.borderColor = UIColor.lightGray.cgColor
-        field.placeholder = "Enter your last name"
         field.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 5, height: 0))
         field.leftViewMode = .always
         field.backgroundColor = .white
@@ -83,9 +54,9 @@ class ResgisterViewController: UIViewController {
         return field
     }()
     
-    private var registerButton : UIButton = {
+    private var loginButton : UIButton = {
         let button = UIButton()
-        button.setTitle("Register", for: .normal)
+        button.setTitle("Log In", for: .normal)
         button.backgroundColor = .link
         button.setTitleColor(.white, for: .normal)
         button.layer.cornerRadius = 12
@@ -99,26 +70,14 @@ class ResgisterViewController: UIViewController {
         view.backgroundColor = .white
         title = "Log In"
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Resgister", style: .done, target: self, action: #selector(didTapResgister))
-        registerButton.addTarget(self, action: #selector(registerButtonTapped), for: .touchUpInside)
+        loginButton.addTarget(self, action: #selector(loginButtontapped), for: .touchUpInside)
         emailTextField.delegate = self
         passwordTextField.delegate = self
         view.addSubview(scrollView)
         scrollView.addSubview(imageView)
-        scrollView.addSubview(firstNameTextField)
-        scrollView.addSubview(lastNameTextField)
         scrollView.addSubview(emailTextField)
         scrollView.addSubview(passwordTextField)
-        scrollView.addSubview(registerButton)
-        
-        imageView.isUserInteractionEnabled = true
-        scrollView.isUserInteractionEnabled = true
-        
-        let gesture = UITapGestureRecognizer(target: self, action: #selector(didTapChangedProfilePic))
-        imageView.addGestureRecognizer(gesture)
-    }
-    
-    @objc func didTapChangedProfilePic() {
-        print("change pic call")
+        scrollView.addSubview(loginButton)
     }
     
     override func viewDidLayoutSubviews() {
@@ -126,28 +85,24 @@ class ResgisterViewController: UIViewController {
         scrollView.frame = view.bounds
         let size = scrollView.width/3
         imageView.frame = CGRect(x: (scrollView.width-size)/2, y: 20, width: size, height: size)
-        firstNameTextField.frame = CGRect(x: 30, y: imageView.bottom+10, width: scrollView.width-60, height: 52)
-        lastNameTextField.frame = CGRect(x: 30, y: firstNameTextField.bottom+10, width: scrollView.width-60, height: 52)
-        emailTextField.frame = CGRect(x: 30, y: lastNameTextField.bottom+10, width: scrollView.width-60, height: 52)
+        emailTextField.frame = CGRect(x: 30, y: imageView.bottom+10, width: scrollView.width-60, height: 52)
         passwordTextField.frame = CGRect(x: 30, y: emailTextField.bottom+10, width: scrollView.width-60, height: 52)
-        registerButton.frame = CGRect(x: 30, y: passwordTextField.bottom+10, width: scrollView.width-60, height: 52)
+        loginButton.frame = CGRect(x: 30, y: passwordTextField.bottom+10, width: scrollView.width-60, height: 52)
     }
     
-    @objc private func registerButtonTapped() {
+    @objc private func loginButtontapped() {
         emailTextField.resignFirstResponder()
         passwordTextField.resignFirstResponder()
-        firstNameTextField.resignFirstResponder()
-        lastNameTextField.resignFirstResponder()
-        guard let firstName = firstNameTextField.text, let lastName = lastNameTextField.text,let email = emailTextField.text, let password = passwordTextField.text, !firstName.isEmpty, !lastName.isEmpty, !email.isEmpty, !password.isEmpty, password.count >= 6 else {
-            alerUserRegisterError()
+        guard let email = emailTextField.text, let password = passwordTextField.text, !email.isEmpty, !password.isEmpty, password.count >= 6 else {
+            alerUserLoginError()
             return
         }
         
         //Firebase Login
     }
     
-    func alerUserRegisterError() {
-        let alert = UIAlertController(title: "Something Wrong", message: "Register Fail", preferredStyle: .alert)
+    func alerUserLoginError() {
+        let alert = UIAlertController(title: "Something Wrong", message: "Login Fail", preferredStyle: .alert)
         let action = UIAlertAction(title: "Dismiss", style: .cancel, handler: nil)
         alert.addAction(action)
         present(alert, animated: true, completion: nil)
@@ -160,14 +115,13 @@ class ResgisterViewController: UIViewController {
     }
 }
 
-extension ResgisterViewController: UITextFieldDelegate {
+extension LoginViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         if textField == emailTextField {
             passwordTextField.becomeFirstResponder()
         } else if textField == passwordTextField {
-            registerButtonTapped()
+            loginButtontapped()
         }
         return true
     }
 }
-
