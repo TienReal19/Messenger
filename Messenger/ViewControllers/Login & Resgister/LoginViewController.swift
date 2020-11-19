@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 import FirebaseAuth
 import FBSDKLoginKit
-
+import GoogleSignIn
 
 class LoginViewController: UIViewController  {
     
@@ -78,9 +78,26 @@ class LoginViewController: UIViewController  {
         return button
     }()
     
+    private var GoogleLoginButton : GIDSignInButton = {
+        let button = GIDSignInButton()
+        button.layer.cornerRadius = 12
+        button.layer.masksToBounds = true
+        return button
+    }()
+    
+    private var loginObserver : NSObjectProtocol?
+    
     //MARK: - viewDidload
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        loginObserver = NotificationCenter.default.addObserver(forName: .didlogInNotification, object: nil, queue: .main, using: { [weak self] _ in
+            guard let strongSelf = self else {
+                return
+            }
+            strongSelf.navigationController?.dismiss(animated: true, completion: nil)
+        })
+        GIDSignIn.sharedInstance()?.presentingViewController = self
         
         view.backgroundColor = .white
         title = "Log In"
@@ -95,6 +112,13 @@ class LoginViewController: UIViewController  {
         scrollView.addSubview(passwordTextField)
         scrollView.addSubview(loginButton)
         scrollView.addSubview(fbLoginButton)
+        scrollView.addSubview(GoogleLoginButton)
+    }
+    
+    deinit {
+        if let observer = loginObserver {
+            NotificationCenter.default.removeObserver(observer)
+        }
     }
     
     //MARK: - viewDidLayoutSubviews
@@ -107,6 +131,7 @@ class LoginViewController: UIViewController  {
         passwordTextField.frame = CGRect(x: 30, y: emailTextField.bottom+10, width: scrollView.width-60, height: 52)
         loginButton.frame = CGRect(x: 30, y: passwordTextField.bottom+10, width: scrollView.width-60, height: 52)
         fbLoginButton.frame = CGRect(x: 30, y: loginButton.bottom+10, width: scrollView.width-60, height: 52)
+        GoogleLoginButton.frame = CGRect(x: 30, y: fbLoginButton.bottom+10, width: scrollView.width-60, height: 52)
     }
     
     @objc private func loginButtontapped() {
