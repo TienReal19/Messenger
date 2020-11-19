@@ -8,8 +8,11 @@
 import Foundation
 import UIKit
 import FirebaseAuth
+import FirebaseDatabase
 
 class ResgisterViewController: UIViewController {
+    
+    //MARK: - components
     private var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.clipsToBounds = true
@@ -18,8 +21,9 @@ class ResgisterViewController: UIViewController {
     
     private var imageView : UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(named: "register")
+        imageView.image = UIImage(systemName: "person.circle")
         imageView.contentMode = .scaleAspectFit
+        imageView.tintColor = .darkGray
         imageView.layer.masksToBounds = true
         imageView.layer.borderWidth = 2
         imageView.layer.borderColor = UIColor.lightGray.cgColor
@@ -98,6 +102,7 @@ class ResgisterViewController: UIViewController {
         return button
     }()
     
+    //MARK: - viewDidload
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -125,6 +130,7 @@ class ResgisterViewController: UIViewController {
         presentPhotoActionSheet()
     }
     
+    //MARK: - viewDidLayoutSubviews
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         scrollView.frame = view.bounds
@@ -149,13 +155,24 @@ class ResgisterViewController: UIViewController {
         }
         
         //Firebase Login
-        FirebaseAuth.Auth.auth().createUser(withEmail: email, password: password) { (authResult, error) in
-            guard let result = authResult, error == nil else {
-                print("Faild to create user \(email)")
+        DatabaseManager.shared.userExist(with: email) { [weak self] (exists) in
+            guard let strongSelf = self else {
                 return
             }
-            let user = result.user
-            print("Create user \(user)")
+            guard !exists else {
+                // user already exist
+                strongSelf.alerUserRegisterError()
+                return
+            }
+            FirebaseAuth.Auth.auth().createUser(withEmail: email, password: password) { (authResult, error) in
+                
+                guard authResult != nil, error == nil else {
+                    print("Faild to create user \(email)")
+                    return
+                }
+                DatabaseManager.shared.insertUser(with: ChapAppUser(firstName: firstName, lastName: lastName, emailAddress: email))
+                strongSelf.navigationController?.dismiss(animated: true, completion: nil)
+            }
         }
     }
     
@@ -173,6 +190,7 @@ class ResgisterViewController: UIViewController {
     }
 }
 
+//MARK: - UITextFieldDelegate
 extension ResgisterViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         if textField == emailTextField {
@@ -184,6 +202,7 @@ extension ResgisterViewController: UITextFieldDelegate {
     }
 }
 
+//MARK: - UIImagePickerControllerDelegate, UINavigationControllerDelegate
 extension ResgisterViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     func presentPhotoActionSheet() {
