@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import FirebaseAuth
 
 class ResgisterViewController: UIViewController {
     private var scrollView: UIScrollView = {
@@ -122,7 +123,6 @@ class ResgisterViewController: UIViewController {
     
     @objc func didTapChangedProfilePic() {
         presentPhotoActionSheet()
-        
     }
     
     override func viewDidLayoutSubviews() {
@@ -149,6 +149,14 @@ class ResgisterViewController: UIViewController {
         }
         
         //Firebase Login
+        FirebaseAuth.Auth.auth().createUser(withEmail: email, password: password) { (authResult, error) in
+            guard let result = authResult, error == nil else {
+                print("Faild to create user \(email)")
+                return
+            }
+            let user = result.user
+            print("Create user \(user)")
+        }
     }
     
     func alerUserRegisterError() {
@@ -208,7 +216,6 @@ extension ResgisterViewController: UIImagePickerControllerDelegate, UINavigation
             return
         }
         imageView.image = selectedImage
-        
     }
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         picker.dismiss(animated: true, completion: nil)
