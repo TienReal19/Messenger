@@ -16,12 +16,11 @@ class ConversationViewController: UIViewController {
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        view.backgroundColor = .red
         validateAuth()
     }
     
     func validateAuth() {
-        if FirebaseAuth.Auth.auth().currentUser != nil {
+        if FirebaseAuth.Auth.auth().currentUser == nil {
             let vc = LoginViewController()
             let nav = UINavigationController(rootViewController: vc)
             nav.modalPresentationStyle = .fullScreen

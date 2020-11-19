@@ -9,7 +9,6 @@ import Foundation
 import FirebaseDatabase
 
 final class DatabaseManager {
-    
     static let shared = DatabaseManager()
     private let database = Database.database().reference()
 }
@@ -40,7 +39,6 @@ struct ChapAppUser {
     let firstName: String
     let lastName: String
     let emailAddress: String
-    
     var safeEmail: String {
         var safemail = emailAddress.replacingOccurrences(of: ".", with: "-")
         safemail = safemail.replacingOccurrences(of: "@", with: "-")
