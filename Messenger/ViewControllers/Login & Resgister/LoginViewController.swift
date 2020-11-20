@@ -78,12 +78,7 @@ class LoginViewController: UIViewController  {
         return button
     }()
     
-    private var GoogleLoginButton : GIDSignInButton = {
-        let button = GIDSignInButton()
-        button.layer.cornerRadius = 12
-        button.layer.masksToBounds = true
-        return button
-    }()
+    private let GoogleLoginButton = GIDSignInButton()
     
     private var loginObserver : NSObjectProtocol?
     
@@ -95,8 +90,10 @@ class LoginViewController: UIViewController  {
             guard let strongSelf = self else {
                 return
             }
+
             strongSelf.navigationController?.dismiss(animated: true, completion: nil)
         })
+
         GIDSignIn.sharedInstance()?.presentingViewController = self
         
         view.backgroundColor = .white
@@ -135,6 +132,7 @@ class LoginViewController: UIViewController  {
     }
     
     @objc private func loginButtontapped() {
+        
         emailTextField.resignFirstResponder()
         passwordTextField.resignFirstResponder()
         guard let email = emailTextField.text, let password = passwordTextField.text, !email.isEmpty, !password.isEmpty, password.count >= 6 else {
@@ -147,10 +145,11 @@ class LoginViewController: UIViewController  {
             guard let strongSelf = self else {
                 return
             }
-            guard authResult != nil , error == nil else {
+            guard authResult != nil, error == nil else {
                 print("Faild to log in user \(email)")
                 return
             }
+            
             strongSelf.navigationController?.dismiss(animated: true, completion: nil)
         }
     }
@@ -188,7 +187,7 @@ extension LoginViewController: LoginButtonDelegate {
     }
     func loginButton(_ loginButton: FBLoginButton, didCompleteWith result: LoginManagerLoginResult?, error: Error?) {
         guard let token = result?.token?.tokenString else {
-            print("fail to login via Facabook")
+            print("fail to login with Facabook")
             return
         }
         
@@ -221,7 +220,7 @@ extension LoginViewController: LoginButtonDelegate {
                     return
                 }
                 guard authResult != nil, error == nil else {
-                    print("log in fail")
+                    print("Facebook credential login failed, MFA may be needed - \(String(describing: error))")
                     return
                 }
                 print("log in via Facabook successfull")
