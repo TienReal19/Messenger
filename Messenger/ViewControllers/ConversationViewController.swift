@@ -11,9 +11,37 @@ import Firebase
 import FirebaseAuth
 
 class ConversationViewController: UIViewController {
+    
+    private var tableView : UITableView = {
+        let table = UITableView()
+        table.isHidden = true
+        table.register(UITableViewCell.self, forCellReuseIdentifier: "CellId")
+        return table
+    }()
+    
+    private var noConversationLabel: UILabel = {
+        let label = UILabel()
+        label.text = "no conversation"
+        label.textAlignment = .center
+        label.textColor = .gray
+        label.isHidden = true
+        label.font = .systemFont(ofSize: 21, weight: .medium)
+        return label
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.addSubview(tableView)
+        view.addSubview(noConversationLabel)
+        setUpTableView()
+        fetchConversation()
     }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        tableView.frame = view.bounds
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         validateAuth()
@@ -26,5 +54,36 @@ class ConversationViewController: UIViewController {
             nav.modalPresentationStyle = .fullScreen
             present(nav, animated: false)
         }
+    }
+    
+    func setUpTableView() {
+        tableView.delegate = self
+        tableView.dataSource = self
+    }
+    
+    func fetchConversation() {
+        tableView.isHidden = false
+    }
+}
+
+extension ConversationViewController: UITableViewDelegate, UITableViewDataSource {
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "CellId", for: indexPath)
+        cell.textLabel?.text = "Hello"
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        
+        let vc = ChatViewController()
+        vc.title = "Valerian"
+        vc.navigationItem.largeTitleDisplayMode = .never
+        navigationController?.pushViewController(vc, animated: true)
     }
 }

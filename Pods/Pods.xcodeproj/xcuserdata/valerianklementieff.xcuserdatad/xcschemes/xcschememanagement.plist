@@ -116,6 +116,11 @@
 			<key>orderHint</key>
 			<integer>13</integer>
 		</dict>
+		<key>JGProgressHUD.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>22</integer>
+		</dict>
 		<key>Pods-Messenger-MessengerUITests.xcscheme</key>
 		<dict>
 			<key>isShown</key>
