@@ -27,15 +27,22 @@ extension DatabaseManager {
             completion(true)        }
     }
     
-    public func insertUser(with user:ChapAppUser) {
+    public func insertUser(with user:ChatAppUser, completion: @escaping((Bool)->Void)) {
         database.child(user.safeEmail).setValue([
             "first_name": user.firstName,
             "last_name": user.lastName
-        ])
+        ]) { error, _  in
+            guard error == nil else {
+                print("fail to write database")
+                completion(false)
+                return
+            }
+            completion(true)
+        }
     }
 }
 
-struct ChapAppUser {
+struct ChatAppUser {
     let firstName: String
     let lastName: String
     let emailAddress: String
@@ -43,5 +50,9 @@ struct ChapAppUser {
         var safemail = emailAddress.replacingOccurrences(of: ".", with: "-")
         safemail = safemail.replacingOccurrences(of: "@", with: "-")
         return safemail
+    }
+    var profilePictureFileName: String {
+        //mayling-gmail-com_profile_picture.png
+        return "\(safeEmail)_profile_picture.png"
     }
 }

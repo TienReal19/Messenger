@@ -191,26 +191,64 @@ extension LoginViewController: LoginButtonDelegate {
             return
         }
         
-        let facebookReguest = FBSDKLoginKit.GraphRequest(graphPath: "me", parameters: ["fields" : "email, name"], tokenString: token, version: nil, httpMethod: .get)
+        let facebookReguest = FBSDKLoginKit.GraphRequest(graphPath: "me", parameters: ["fields":
+                                                                                        "email, first_name, last_name, picture.type(large)"],
+                                                         tokenString: token,
+                                                         version: nil,
+                                                         httpMethod: .get)
+        
         facebookReguest.start { (_, result, error) in
             guard let result = result as? [String: Any], error == nil else {
                 print("fail to graph request")
                 return
             }
-            guard let userName = result["name"] as? String, let email = result["email"] as? String else {
-                print("fail to get username and email")
-                return
+            guard let firstName = result["first_name"] as? String,
+                let lastName = result["last_name"] as? String,
+                let email = result["email"] as? String,
+                let picture = result["picture"] as? [String: Any],
+                let data = picture["data"] as? [String: Any],
+                let pictureUrl = data["url"] as? String else {
+                    print("Faield to get email and name from fb result")
+                    return
             }
-            let nameComponent = userName.components(separatedBy: " ")
-            guard nameComponent.count == 2 else {
-                return
-            }
-            let firstName = nameComponent[0]
-            let lastName = nameComponent[1]
+
             
             DatabaseManager.shared.userExist(with: email) { (exists) in
                 if !exists {
-                    DatabaseManager.shared.insertUser(with: ChapAppUser(firstName: firstName, lastName: lastName, emailAddress: email))
+                    let chatUser = ChatAppUser(firstName: firstName,
+                                               lastName: lastName,
+                                               emailAddress: email)
+                    DatabaseManager.shared.insertUser(with: chatUser, completion: { success in
+                        if success {
+                            //upload image
+                            guard let url = URL(string: pictureUrl) else {
+                                return
+                            }
+
+                            print("Downloading data from facebook image")
+
+                            URLSession.shared.dataTask(with: url, completionHandler: { data, _,_ in
+                                guard let data = data else {
+                                    print("Failed to get data from facebook")
+                                    return
+                                }
+
+                                print("got data from FB, uploading...")
+
+                                // upload iamge
+                                let filename = chatUser.profilePictureFileName
+                                StorageManager.shared.uploadProfilePicture(with: data, filename: filename, completion: { result in
+                                    switch result {
+                                    case .success(let downloadUrl):
+                                        UserDefaults.standard.set(downloadUrl, forKey: "profile_picture_url")
+                                        print(downloadUrl)
+                                    case .failure(let error):
+                                        print("Storage maanger error: \(error)")
+                                    }
+                                })
+                            }).resume()
+                        }
+                    })
                 }
             }
             
