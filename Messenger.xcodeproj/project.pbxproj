@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		140C1569B615DDCDB4C9B8A5 /* Pods_Messenger_MessengerUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D419FAD9500280DB16D1E99 /* Pods_Messenger_MessengerUITests.framework */; };
+		411412F5256A5E010084EDC7 /* ConversationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 411412F4256A5E000084EDC7 /* ConversationTableViewCell.swift */; };
+		411412FA256A5F740084EDC7 /* ConversationModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 411412F9256A5F740084EDC7 /* ConversationModels.swift */; };
 		411AA9D925656FAE006CE145 /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 411AA9D825656FAE006CE145 /* Extension.swift */; };
 		412450C925656149009D1D84 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 412450C825656149009D1D84 /* AppDelegate.swift */; };
 		412450CB25656149009D1D84 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 412450CA25656149009D1D84 /* SceneDelegate.swift */; };
@@ -48,6 +50,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		411412F4256A5E000084EDC7 /* ConversationTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationTableViewCell.swift; sourceTree = "<group>"; };
+		411412F9256A5F740084EDC7 /* ConversationModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationModels.swift; sourceTree = "<group>"; };
 		411AA9D825656FAE006CE145 /* Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
 		412450C525656149009D1D84 /* Messenger.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Messenger.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		412450C825656149009D1D84 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -138,6 +142,7 @@
 				412450D42565614A009D1D84 /* Assets.xcassets */,
 				412450CE25656149009D1D84 /* Main.storyboard */,
 				412450D62565614A009D1D84 /* LaunchScreen.storyboard */,
+				411412F4256A5E000084EDC7 /* ConversationTableViewCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -199,6 +204,7 @@
 		412450FE25656158009D1D84 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				411412F9256A5F740084EDC7 /* ConversationModels.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -521,6 +527,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				411412FA256A5F740084EDC7 /* ConversationModels.swift in Sources */,
 				417A5FEC256669A2007C75B6 /* DatabaseManager.swift in Sources */,
 				41245114256562AD009D1D84 /* ConversationViewController.swift in Sources */,
 				412450C925656149009D1D84 /* AppDelegate.swift in Sources */,
@@ -530,6 +537,7 @@
 				413349742568C8A100D423BB /* NewConversationViewController.swift in Sources */,
 				4124510F25656270009D1D84 /* ResgisterViewController.swift in Sources */,
 				417A5FF4256681B6007C75B6 /* ProfileViewController.swift in Sources */,
+				411412F5256A5E010084EDC7 /* ConversationTableViewCell.swift in Sources */,
 				4124510A2565625B009D1D84 /* LoginViewController.swift in Sources */,
 				419701072568BEE200C03367 /* ChatViewController.swift in Sources */,
 				412450D325656149009D1D84 /* Messenger.xcdatamodeld in Sources */,
