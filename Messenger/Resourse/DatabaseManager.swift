@@ -7,6 +7,7 @@
 
 import Foundation
 import FirebaseDatabase
+import MessageKit
 
 final class DatabaseManager {
     static let shared = DatabaseManager()
@@ -299,12 +300,14 @@ extension DatabaseManager {
     
     // Fetches and returns all conversations for the user with passed in email
     public func getAllConversations(for email: String, completion: @escaping (Result<[Conversation], Error>) -> Void) {
-        database.child("\(email)/conversations").observe(.value, with: { snapshot in
-            guard let value = snapshot.value as? [[String: Any]] else{
+        print("\(email)/conversations")
+        Database.database().reference().child("\(email)").child("conversations").observe(.value, with: { snapshot in
+            print(snapshot.value!)
+            guard let value = snapshot.value as? [[String: Any]] else {
                 completion(.failure(DatabaseError.failedToFetch))
                 return
             }
-
+    
             let conversations: [Conversation] = value.compactMap({ dictionary in
                 guard let conversationId = dictionary["id"] as? String,
                     let name = dictionary["name"] as? String,

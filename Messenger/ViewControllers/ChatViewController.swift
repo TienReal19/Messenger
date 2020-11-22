@@ -104,16 +104,16 @@ class ChatViewController: MessagesViewController {
 extension ChatViewController: InputBarAccessoryViewDelegate {
     func inputBar(_ inputBar: InputBarAccessoryView, didPressSendButtonWith text: String) {
         guard !text.replacingOccurrences(of: " ", with: "").isEmpty,
-            let selfSender = self.selfSender,
-            let messageId = createMessageId() else {
-                return
+              let selfSender = self.selfSender,
+              let messageId = createMessageId() else {
+            return
         }
         
         let mmessage = Message(sender: selfSender,
                                messageId: messageId,
                                sentDate: Date(),
                                kind: .text(text))
-
+        
         //send message
         if isNewConversation {
             DatabaseManager.shared.createNewConversation(with: otherUserEmail, name: self.title ?? "User", firstMessage: mmessage, completion: { [weak self] success in
@@ -122,7 +122,7 @@ extension ChatViewController: InputBarAccessoryViewDelegate {
                     self?.isNewConversation = false
                     let newConversationId = "conversation_\(mmessage.messageId)"
                     self?.conversationId = newConversationId
-//                    self?.listenForMessages(id: newConversationId, shouldScrollToBottom: true)
+                    //                    self?.listenForMessages(id: newConversationId, shouldScrollToBottom: true)
                     self?.messageInputBar.inputTextView.text = nil
                 }
                 else {
@@ -139,14 +139,14 @@ extension ChatViewController: InputBarAccessoryViewDelegate {
         guard let currentUserEmail = UserDefaults.standard.value(forKey: "email") as? String else {
             return nil
         }
-
+        
         let safeCurrentEmail = DatabaseManager.safeEmail(emailAddress: currentUserEmail)
-
+        
         let dateString = Self.dateFormatter.string(from: Date())
         let newIdentifier = "\(otherUserEmail)_\(safeCurrentEmail)_\(dateString)"
-
+        
         print("created message id: \(newIdentifier)")
-
+        
         return newIdentifier
     }
 }
@@ -156,12 +156,12 @@ extension ChatViewController: InputBarAccessoryViewDelegate {
 extension ChatViewController: MessagesDataSource, MessagesLayoutDelegate, MessagesDisplayDelegate {
     
     func currentSender() -> SenderType {
-    if let sender = selfSender {
-        return sender
+        if let sender = selfSender {
+            return sender
+        }
+        
+        fatalError("Self Sender is nil, email should be cached")
     }
-
-    fatalError("Self Sender is nil, email should be cached")
-}
     
     func messageForItem(at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> MessageType {
         return messages[indexPath.section]
@@ -170,6 +170,4 @@ extension ChatViewController: MessagesDataSource, MessagesLayoutDelegate, Messag
     func numberOfSections(in messagesCollectionView: MessagesCollectionView) -> Int {
         return messages.count
     }
-    
-    
 }

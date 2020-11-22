@@ -47,6 +47,8 @@ class ConversationViewController: UIViewController {
         guard let email = UserDefaults.standard.value(forKey: "email") as? String else {
             return
         }
+        
+        print("Starting converation fetch....")
 //
 //        if let observer = loginObserver {
 //            NotificationCenter.default.removeObserver(observer)
@@ -55,7 +57,9 @@ class ConversationViewController: UIViewController {
 //        print("starting conversation fetch...")
 //
         let safeEmail = DatabaseManager.safeEmail(emailAddress: email)
+        print(safeEmail)
         DatabaseManager.shared.getAllConversations(for: safeEmail, completion: { [weak self] result in
+            print(result)
             switch result {
             case .success(let conversations):
                 print("successfully got conversation models")
