@@ -85,63 +85,8 @@ class ConversationViewController: UIViewController {
     
     @objc private func didTapComposeButton() {
         let vc = NewConversationViewController()
-        vc.completion = { result in
-            print(result)
-            self.createNewConversation(result: result)
-        }
-        //            let currentConversations = strongSelf.conversations
-        
-        //            if let targetConversation = currentConversations.first(where: {
-        //                $0.otherUserEmail == DatabaseManager.safeEmail(emailAddress: result.email)
-        //            }) {
-        //                let vc = ChatViewController(with: targetConversation.otherUserEmail, id: targetConversation.id)
-        //                vc.isNewConversation = false
-        //                vc.title = targetConversation.name
-        //                vc.navigationItem.largeTitleDisplayMode = .never
-        //                strongSelf.navigationController?.pushViewController(vc, animated: true)
-        //            }
-        //            else {
-        //                strongSelf.createNewConversation(result: result)
-        //            }
         let nav = UINavigationController(rootViewController: vc)
         present(nav, animated: true, completion: nil)
-    }
-
-    
-    private func createNewConversation(result: [String : String]) {
-//        let name = result.name
-//        let email = DatabaseManager.safeEmail(emailAddress: result.email)
-
-        // check in datbase if conversation with these two users exists
-        // if it does, reuse conversation id
-        // otherwise use existing code
-        guard let name = result["name"], let email = result["email"] else {
-            return
-        }
-        let vc = ChatViewController(with: email, id: "dada")
-        vc.isNewConversation = true
-        vc.title = name
-        vc.navigationItem.largeTitleDisplayMode = .never
-        navigationController?.pushViewController(vc, animated: true)
-//        DatabaseManager.shared.conversationExists(iwth: email, completion: { [weak self] result in
-//            guard let strongSelf = self else {
-//                return
-//            }
-//            switch result {
-//            case .success(let conversationId):
-//                let vc = ChatViewController(with: email, id: conversationId)
-//                vc.isNewConversation = false
-//                vc.title = name
-//                vc.navigationItem.largeTitleDisplayMode = .never
-//                strongSelf.navigationController?.pushViewController(vc, animated: true)
-//            case .failure(_):
-//                let vc = ChatViewController(with: email, id: nil)
-//                vc.isNewConversation = true
-//                vc.title = name
-//                vc.navigationItem.largeTitleDisplayMode = .never
-//                strongSelf.navigationController?.pushViewController(vc, animated: true)
-//            }
-//        })
     }
     
     override func viewDidLayoutSubviews() {
@@ -190,6 +135,7 @@ extension ConversationViewController: UITableViewDelegate, UITableViewDataSource
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+<<<<<<< HEAD
         let model = conversations[indexPath.row]
         openConversation(model)
     }
@@ -197,6 +143,11 @@ extension ConversationViewController: UITableViewDelegate, UITableViewDataSource
     func openConversation(_ model: Conversation) {
         let vc = ChatViewController(with: model.otherUserEmail, id: model.id)
         vc.title = model.name
+=======
+        
+        let vc = ChatViewController()
+        vc.title = "Valerian"
+>>>>>>> parent of 9150cf3... sending iMessage
         vc.navigationItem.largeTitleDisplayMode = .never
         navigationController?.pushViewController(vc, animated: true)
     }
