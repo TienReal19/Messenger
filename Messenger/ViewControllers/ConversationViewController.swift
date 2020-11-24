@@ -135,32 +135,20 @@ extension ConversationViewController: UITableViewDelegate, UITableViewDataSource
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-<<<<<<< HEAD
-        
-        
-        func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-            return 120
-        }
-=======
-<<<<<<< HEAD
+
         let model = conversations[indexPath.row]
         openConversation(model)
     }
     
     func openConversation(_ model: Conversation) {
-        let vc = ChatViewController(with: model.otherUserEmail, id: model.id)
-        vc.title = model.name
-=======
-        
+        let vc = ChatViewController
         let vc = ChatViewController()
         vc.title = "Valerian"
->>>>>>> parent of 9150cf3... sending iMessage
-        vc.navigationItem.largeTitleDisplayMode = .never
-        navigationController?.pushViewController(vc, animated: true)
+
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 120
->>>>>>> 9442b7f5d49169739d657fc00c3e387c4c2045e0
+
     }
 }

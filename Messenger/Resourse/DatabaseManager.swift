@@ -113,7 +113,7 @@ extension DatabaseManager {
     }
 }
 
-<<<<<<< HEAD
+
 //MARK: - Sending messages / conversations
 extension DatabaseManager {
     
@@ -383,8 +383,6 @@ extension DatabaseManager {
     }
 }
 
-=======
->>>>>>> parent of 9150cf3... sending iMessage
 struct ChatAppUser {
     let firstName: String
     let lastName: String
