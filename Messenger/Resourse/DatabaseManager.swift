@@ -113,7 +113,6 @@ extension DatabaseManager {
     }
 }
 
-
 //MARK: - Sending messages / conversations
 extension DatabaseManager {
     

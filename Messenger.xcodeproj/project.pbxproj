@@ -22,6 +22,7 @@
 		4124510F25656270009D1D84 /* ResgisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4124510E25656270009D1D84 /* ResgisterViewController.swift */; };
 		41245114256562AD009D1D84 /* ConversationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41245113256562AD009D1D84 /* ConversationViewController.swift */; };
 		413349742568C8A100D423BB /* NewConversationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 413349732568C8A100D423BB /* NewConversationViewController.swift */; };
+		416DDA22256CC27A00D0DAF6 /* ChatModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 416DDA21256CC27A00D0DAF6 /* ChatModels.swift */; };
 		417A5FE125666052007C75B6 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 417A5FE025666052007C75B6 /* GoogleService-Info.plist */; };
 		417A5FEC256669A2007C75B6 /* DatabaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 417A5FEB256669A2007C75B6 /* DatabaseManager.swift */; };
 		417A5FF4256681B6007C75B6 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 417A5FF3256681B6007C75B6 /* ProfileViewController.swift */; };
@@ -72,6 +73,7 @@
 		41245113256562AD009D1D84 /* ConversationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationViewController.swift; sourceTree = "<group>"; };
 		413349732568C8A100D423BB /* NewConversationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewConversationViewController.swift; sourceTree = "<group>"; };
 		4149CD68073390BC05201CB3 /* Pods-Messenger-MessengerUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Messenger-MessengerUITests.release.xcconfig"; path = "Target Support Files/Pods-Messenger-MessengerUITests/Pods-Messenger-MessengerUITests.release.xcconfig"; sourceTree = "<group>"; };
+		416DDA21256CC27A00D0DAF6 /* ChatModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatModels.swift; sourceTree = "<group>"; };
 		417A5FE025666052007C75B6 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		417A5FEB256669A2007C75B6 /* DatabaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseManager.swift; sourceTree = "<group>"; };
 		417A5FF3256681B6007C75B6 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
@@ -215,6 +217,7 @@
 			isa = PBXGroup;
 			children = (
 				411412F9256A5F740084EDC7 /* ConversationModels.swift */,
+				416DDA21256CC27A00D0DAF6 /* ChatModels.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -533,6 +536,7 @@
 				412450C925656149009D1D84 /* AppDelegate.swift in Sources */,
 				41DADBC025694E7700C8661E /* StorageManager.swift in Sources */,
 				411AA9D925656FAE006CE145 /* Extension.swift in Sources */,
+				416DDA22256CC27A00D0DAF6 /* ChatModels.swift in Sources */,
 				412450CB25656149009D1D84 /* SceneDelegate.swift in Sources */,
 				413349742568C8A100D423BB /* NewConversationViewController.swift in Sources */,
 				4124510F25656270009D1D84 /* ResgisterViewController.swift in Sources */,

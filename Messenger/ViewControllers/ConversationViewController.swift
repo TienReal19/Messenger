@@ -135,13 +135,11 @@ extension ConversationViewController: UITableViewDelegate, UITableViewDataSource
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-
         let model = conversations[indexPath.row]
         openConversation(model)
     }
     
     func openConversation(_ model: Conversation) {
-        let vc = ChatViewController
         let vc = ChatViewController()
         vc.title = "Valerian"
 
@@ -149,6 +147,5 @@ extension ConversationViewController: UITableViewDelegate, UITableViewDataSource
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 120
-
     }
 }
