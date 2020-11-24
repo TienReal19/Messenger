@@ -10,7 +10,6 @@ import UIKit
 import FirebaseAuth
 import FBSDKLoginKit
 import GoogleSignIn
-import SDWebImage
 
 class ProfileViewController: UIViewController {
     
@@ -54,14 +53,14 @@ class ProfileViewController: UIViewController {
         imageView.layer.cornerRadius = imageView.width/2
         headerView.addSubview(imageView)
 
-        StorageManager.shared.downloadURL(for: path, completion: { result in
-            switch result {
-            case .success(let url):
-                imageView.sd_setImage(with: url, completed: nil)
-            case .failure(let error):
-                print("Failed to get download url: \(error)")
-            }
-        })
+//        StorageManager.shared.downloadURL(for: path, completion: { result in
+//            switch result {
+//            case .success(let url):
+//                imageView.sd_setImage(with: url, completed: nil)
+//            case .failure(let error):
+//                print("Failed to get download url: \(error)")
+//            }
+//        })
         
         
         StorageManager.shared.downloadURL(for: path) { [weak self] result in

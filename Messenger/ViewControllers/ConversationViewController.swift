@@ -12,12 +12,10 @@ import FirebaseAuth
 
 class ConversationViewController: UIViewController {
     
-    private var conversations = [Conversation]()
-    
     private var tableView : UITableView = {
         let table = UITableView()
         table.isHidden = true
-        table.register(ConversationTableViewCell.self, forCellReuseIdentifier: ConversationTableViewCell.identifier)
+        table.register(UITableViewCell.self, forCellReuseIdentifier: "CellId")
         return table
     }()
     
@@ -40,47 +38,6 @@ class ConversationViewController: UIViewController {
         view.addSubview(noConversationLabel)
         setUpTableView()
         fetchConversation()
-        startListeningForCOnversations()
-    }
-    
-    private func startListeningForCOnversations() {
-        guard let email = UserDefaults.standard.value(forKey: "email") as? String else {
-            return
-        }
-        
-        print("Starting converation fetch....")
-//
-//        if let observer = loginObserver {
-//            NotificationCenter.default.removeObserver(observer)
-//        }
-//
-//        print("starting conversation fetch...")
-//
-        let safeEmail = DatabaseManager.safeEmail(emailAddress: email)
-        print(safeEmail)
-        DatabaseManager.shared.getAllConversations(for: safeEmail, completion: { [weak self] result in
-            print(result)
-            switch result {
-            case .success(let conversations):
-                print("successfully got conversation models")
-                guard !conversations.isEmpty else {
-                    self?.tableView.isHidden = true
-                    self?.noConversationLabel.isHidden = false
-                    return
-                }
-                self?.noConversationLabel.isHidden = true
-                self?.tableView.isHidden = false
-                self?.conversations = conversations
-
-                DispatchQueue.main.async {
-                    self?.tableView.reloadData()
-                }
-            case .failure(let error):
-                self?.tableView.isHidden = true
-                self?.noConversationLabel.isHidden = false
-                print("failed to get convos: \(error)")
-            }
-        })
     }
     
     @objc private func didTapComposeButton() {
@@ -122,30 +79,22 @@ class ConversationViewController: UIViewController {
 extension ConversationViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return conversations.count
+        return 1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let model = conversations[indexPath.row]
-        let cell = tableView.dequeueReusableCell(withIdentifier: ConversationTableViewCell.identifier,
-                                                 for: indexPath) as! ConversationTableViewCell
-        cell.configure(with: model)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "CellId", for: indexPath)
+        cell.textLabel?.text = "Hello"
+        cell.accessoryType = .disclosureIndicator
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        let model = conversations[indexPath.row]
-        openConversation(model)
-    }
-    
-    func openConversation(_ model: Conversation) {
+        
         let vc = ChatViewController()
         vc.title = "Valerian"
-
-    }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 120
+        vc.navigationItem.largeTitleDisplayMode = .never
+        navigationController?.pushViewController(vc, animated: true)
     }
 }

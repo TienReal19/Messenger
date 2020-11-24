@@ -11,15 +11,13 @@ pod 'Firebase/Database'
 pod 'Firebase/Storage'
 
 
-pod 'FBSDKCoreKit'
 pod 'FBSDKLoginKit'
-pod 'FBSDKShareKit'
-
-
 pod 'GoogleSignIn'
 
 pod 'MessageKit'
-pod 'SDWebImage'
+
+
+
 
   # Pods for Messenger
 

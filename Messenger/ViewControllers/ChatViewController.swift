@@ -8,20 +8,29 @@
 import UIKit
 import MessageKit
 
+struct Message: MessageType {
+    var sender: SenderType
+    
+    var messageId: String
+    
+    var sentDate: Date
+    
+    var kind: MessageKind
+}
+
+struct sender: SenderType {
+    var photoURL: String
+    var senderId: String
+    
+    var displayName: String
+}
+
 class ChatViewController: MessagesViewController {
     
     private var messages = [Message]()
-    private var selfSender = Sender(photoURL: "",
+    private var selfSender = sender(photoURL: "",
                                     senderId: "1",
                                     displayName: "Valerian")
-    
-    public static let dateFormatter: DateFormatter = {
-        let formattre = DateFormatter()
-        formattre.dateStyle = .medium
-        formattre.timeStyle = .long
-        formattre.locale = .current
-        return formattre
-    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,23 +51,18 @@ class ChatViewController: MessagesViewController {
     }
 }
 
-
 extension ChatViewController: MessagesDataSource, MessagesLayoutDelegate, MessagesDisplayDelegate {
     func currentSender() -> SenderType {
-        let sender = selfSender {
-            return
-        }
+        return selfSender
     }
     
     func messageForItem(at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> MessageType {
         return messages[indexPath.section]
     }
-
+    
     func numberOfSections(in messagesCollectionView: MessagesCollectionView) -> Int {
         return messages.count
     }
     
+    
 }
-
-
-
