@@ -127,6 +127,7 @@ class ConversationViewController: UIViewController {
     
     func fetchConversation() {
         tableView.isHidden = false
+        print("alala")
     }
 }
 
