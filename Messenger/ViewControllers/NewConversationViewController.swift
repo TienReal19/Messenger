@@ -9,6 +9,13 @@ import UIKit
 
 class NewConversationViewController: UIViewController {
     
+<<<<<<< HEAD
+=======
+    private var users = [[String: String]]()
+    private var results = [[String: String]]()
+    private var hasFetched = false
+    
+>>>>>>> parent of 9150cf3... sending iMessage
     private var searchBar : UISearchBar = {
         let searchbar = UISearchBar()
         searchbar.placeholder = "Search for users....."
@@ -38,6 +45,7 @@ class NewConversationViewController: UIViewController {
         return table
     }()
     
+<<<<<<< HEAD
     private var noConversationLabel: UILabel = {
         let label = UILabel()
         label.text = "no conversation"
@@ -47,6 +55,12 @@ class NewConversationViewController: UIViewController {
         label.font = .systemFont(ofSize: 21, weight: .medium)
         return label
     }()
+=======
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        // start conversation
+    }
+>>>>>>> parent of 9150cf3... sending iMessage
 }
 
 extension NewConversationViewController: UISearchBarDelegate {
