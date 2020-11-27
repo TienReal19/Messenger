@@ -326,7 +326,8 @@ extension DatabaseManager {
                                     otherUserEmail: otherUserEmail,
                                     latestMessage: latestMmessageObject)
             })
-        
+            
+            completion(.success(conversations))
         })
     }
     
