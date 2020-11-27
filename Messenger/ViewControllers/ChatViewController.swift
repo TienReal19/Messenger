@@ -147,14 +147,28 @@ extension ChatViewController: InputBarAccessoryViewDelegate {
                     self?.isNewConversation = false
                     let newConversationId = "conversation_\(mmessage.messageId)"
                     self?.conversationId = newConversationId
-//                    self?.listenForMessages(id: newConversationId, shouldScrollToBottom: true)
                     self?.messageInputBar.inputTextView.text = nil
                 }
                 else {
                     print("faield ot send")
                 }
             })
-        } 
+        }
+        else {
+            guard let conversationId = conversationId, let name = self.title else {
+                return
+            }
+            // append to existing conversation data
+            DatabaseManager.shared.sendMessage(to: conversationId, otherUserEmail: otherUserEmail, name: name, newMessage: mmessage, completion: { [weak self] success in
+                if success {
+                    self?.messageInputBar.inputTextView.text = nil
+                    print("message sent")
+                }
+                else {
+                    print("failed to send")
+                }
+            })
+        }
     }
     
     private func createMessageId() -> String? {

@@ -127,6 +127,8 @@ extension AppDelegate: GIDSignInDelegate {
             return
         }
         UserDefaults.standard.set(email, forKey: "email")
+        UserDefaults.standard.set("\(firstName) \(lastName)", forKey: "name")
+        
         DatabaseManager.shared.userExist(with: email) { (exist) in
             if !exist {
                 let chatUser = ChatAppUser(firstName: firstName,
