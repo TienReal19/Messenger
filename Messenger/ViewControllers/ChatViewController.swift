@@ -102,12 +102,14 @@ class ChatViewController: MessagesViewController {
 
 //MARK: - InputBarAccessoryViewDelegate
 extension ChatViewController: InputBarAccessoryViewDelegate {
+    
     func inputBar(_ inputBar: InputBarAccessoryView, didPressSendButtonWith text: String) {
         guard !text.replacingOccurrences(of: " ", with: "").isEmpty,
             let selfSender = self.selfSender,
             let messageId = createMessageId() else {
                 return
         }
+        print("Sending \(text)")
         
         let mmessage = Message(sender: selfSender,
                                messageId: messageId,
@@ -129,9 +131,7 @@ extension ChatViewController: InputBarAccessoryViewDelegate {
                     print("faield ot send")
                 }
             })
-        } else {
-            
-        }
+        } 
     }
     
     private func createMessageId() -> String? {
@@ -141,7 +141,6 @@ extension ChatViewController: InputBarAccessoryViewDelegate {
         }
 
         let safeCurrentEmail = DatabaseManager.safeEmail(emailAddress: currentUserEmail)
-
         let dateString = Self.dateFormatter.string(from: Date())
         let newIdentifier = "\(otherUserEmail)_\(safeCurrentEmail)_\(dateString)"
 
@@ -156,12 +155,12 @@ extension ChatViewController: InputBarAccessoryViewDelegate {
 extension ChatViewController: MessagesDataSource, MessagesLayoutDelegate, MessagesDisplayDelegate {
     
     func currentSender() -> SenderType {
-    if let sender = selfSender {
-        return sender
+        if let sender = selfSender {
+            return sender
+        }
+        
+        fatalError("Self Sender is nil, email should be cached")
     }
-
-    fatalError("Self Sender is nil, email should be cached")
-}
     
     func messageForItem(at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> MessageType {
         return messages[indexPath.section]
