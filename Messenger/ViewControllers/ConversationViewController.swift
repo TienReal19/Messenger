@@ -30,6 +30,8 @@ class ConversationViewController: UIViewController {
         return label
     }()
     
+    private var loginObserver: NSObjectProtocol?
+
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .compose,
@@ -40,12 +42,26 @@ class ConversationViewController: UIViewController {
         setUpTableView()
         fetchConversation()
         startListeningForCOnversations()
+        
+        loginObserver = NotificationCenter.default.addObserver(forName: .didlogInNotification, object: nil, queue: .main, using: { [weak self] _ in
+            guard let strongSelf = self else {
+                return
+            }
+
+            strongSelf.startListeningForCOnversations()
+        })
+
     }
     
     private func startListeningForCOnversations() {
         guard let email = UserDefaults.standard.value(forKey: "email") as? String else {
             return
         }
+        
+        if let observer = loginObserver {
+            NotificationCenter.default.removeObserver(observer)
+        }
+        
         print("starting conversation fetch....")
         let safeEmail = DatabaseManager.safeEmail(emailAddress: email)
         DatabaseManager.shared.getAllConversations(for: safeEmail, completion: { [weak self] result in
@@ -180,5 +196,27 @@ extension ConversationViewController: UITableViewDelegate, UITableViewDataSource
         vc.title = model.name
         vc.navigationItem.largeTitleDisplayMode = .never
         navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        return .delete
+    }
+
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            // begin delete
+            let conversationId = conversations[indexPath.row].id
+            tableView.beginUpdates()
+            self.conversations.remove(at: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: .left)
+
+            DatabaseManager.shared.deleteConversation(conversationId: conversationId, completion: { success in
+                if !success {
+                    // add model and row back and show error alert
+                }
+            })
+
+            tableView.endUpdates()
+        }
     }
 }
