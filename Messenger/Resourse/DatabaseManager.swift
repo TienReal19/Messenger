@@ -403,7 +403,7 @@ extension DatabaseManager {
                 if type == "photo" {
                     // photo
                     guard let imageUrl = URL(string: content),
-                    let placeHolder = UIImage(systemName: "plus") else {
+                          let placeHolder = UIImage(systemName: "plus") else {
                         return nil
                     }
                     let media = Media(url: imageUrl,
@@ -411,11 +411,24 @@ extension DatabaseManager {
                                       placeholderImage: placeHolder,
                                       size: CGSize(width: 300, height: 300))
                     kind = .photo(media)
-                
-                } else {
+                    
+                } else if type == "video" {
+                    // photo
+                    guard let videoUrl = URL(string: content),
+                          let placeHolder = UIImage(named: "video_placeholder") else {
+                        return nil
+                    }
+                    
+                    let media = Media(url: videoUrl,
+                                      image: nil,
+                                      placeholderImage: placeHolder,
+                                      size: CGSize(width: 300, height: 300))
+                    kind = .video(media)
+                }
+                else {
                     kind = .text(content)
                 }
-                
+
                 guard let finalKind = kind else {
                     return nil
                 }

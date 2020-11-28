@@ -84,17 +84,16 @@ class ConversationViewController: UIViewController {
     }
 
     
-    private func createNewConversation(result: [String : String]) {
+    private func createNewConversation(result: SearchResult) {
 //        let name = result.name
 //        let email = DatabaseManager.safeEmail(emailAddress: result.email)
 
         // check in datbase if conversation with these two users exists
         // if it does, reuse conversation id
         // otherwise use existing code
-        guard let name = result["name"],
-              let email = result["email"] else {
-            return
-        }
+        
+        let name = result.name
+        let email = result.email
         
         let vc = ChatViewController(with: email, id: nil)
         vc.isNewConversation = true

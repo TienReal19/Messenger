@@ -28,6 +28,8 @@
 		41EC6BFB2570C5BF0037ACB6 /* ConversationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41EC6BFA2570C5BF0037ACB6 /* ConversationTableViewCell.swift */; };
 		41EC6C002570C7F20037ACB6 /* ConversationModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41EC6BFF2570C7F20037ACB6 /* ConversationModels.swift */; };
 		41F3ADC0257226B900C5287B /* PhotoViewerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41F3ADBF257226B900C5287B /* PhotoViewerViewController.swift */; };
+		41F3ADC52572713E00C5287B /* SearchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41F3ADC42572713E00C5287B /* SearchResult.swift */; };
+		41F3ADCA257272DE00C5287B /* NewConversationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41F3ADC9257272DE00C5287B /* NewConversationCell.swift */; };
 		8E2B9E791EEB8D1AC05B96D9 /* Pods_Messenger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CBE6CC9723AE81D23D4EEA4 /* Pods_Messenger.framework */; };
 		8F7C3A3FEF61EE724C5759F5 /* Pods_MessengerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 62AB625A1F5F21371D47A9D3 /* Pods_MessengerTests.framework */; };
 		FFB70E029EECE1004E6079A7 /* Pods_Messenger_MessengerUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0EF177EB07B55EA02A3946F4 /* Pods_Messenger_MessengerUITests.framework */; };
@@ -82,6 +84,8 @@
 		41EC6BFA2570C5BF0037ACB6 /* ConversationTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationTableViewCell.swift; sourceTree = "<group>"; };
 		41EC6BFF2570C7F20037ACB6 /* ConversationModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationModels.swift; sourceTree = "<group>"; };
 		41F3ADBF257226B900C5287B /* PhotoViewerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoViewerViewController.swift; sourceTree = "<group>"; };
+		41F3ADC42572713E00C5287B /* SearchResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResult.swift; sourceTree = "<group>"; };
+		41F3ADC9257272DE00C5287B /* NewConversationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewConversationCell.swift; sourceTree = "<group>"; };
 		62AB625A1F5F21371D47A9D3 /* Pods_MessengerTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MessengerTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9E32DBF423E293490DDB1F8A /* Pods-MessengerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MessengerTests.release.xcconfig"; path = "Target Support Files/Pods-MessengerTests/Pods-MessengerTests.release.xcconfig"; sourceTree = "<group>"; };
 		EA0E297201A13E6DD2F476B4 /* Pods-Messenger.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Messenger.debug.xcconfig"; path = "Target Support Files/Pods-Messenger/Pods-Messenger.debug.xcconfig"; sourceTree = "<group>"; };
@@ -145,6 +149,7 @@
 				412450CE25656149009D1D84 /* Main.storyboard */,
 				412450D62565614A009D1D84 /* LaunchScreen.storyboard */,
 				41EC6BFA2570C5BF0037ACB6 /* ConversationTableViewCell.swift */,
+				41F3ADC9257272DE00C5287B /* NewConversationCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -207,6 +212,7 @@
 			isa = PBXGroup;
 			children = (
 				41EC6BFF2570C7F20037ACB6 /* ConversationModels.swift */,
+				41F3ADC42572713E00C5287B /* SearchResult.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -532,6 +538,7 @@
 			files = (
 				41EC6C002570C7F20037ACB6 /* ConversationModels.swift in Sources */,
 				417A5FEC256669A2007C75B6 /* DatabaseManager.swift in Sources */,
+				41F3ADC52572713E00C5287B /* SearchResult.swift in Sources */,
 				41F3ADC0257226B900C5287B /* PhotoViewerViewController.swift in Sources */,
 				41245114256562AD009D1D84 /* ConversationViewController.swift in Sources */,
 				412450C925656149009D1D84 /* AppDelegate.swift in Sources */,
@@ -545,6 +552,7 @@
 				4124510A2565625B009D1D84 /* LoginViewController.swift in Sources */,
 				419701072568BEE200C03367 /* ChatViewController.swift in Sources */,
 				412450D325656149009D1D84 /* Messenger.xcdatamodeld in Sources */,
+				41F3ADCA257272DE00C5287B /* NewConversationCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
