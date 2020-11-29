@@ -232,7 +232,7 @@ extension LoginViewController: LoginButtonDelegate {
             UserDefaults.standard.set(email, forKey: "email")
             UserDefaults.standard.set("\(firstName) \(lastName)", forKey: "name")
 
-            DatabaseManager.shared.userExist(with: email) { (exists) in
+            DatabaseManager.shared.userExists(with: email) { (exists) in
                 if !exists {
                     let chatUser = ChatAppUser(firstName: firstName,
                                                lastName: lastName,
