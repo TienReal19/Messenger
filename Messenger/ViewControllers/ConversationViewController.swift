@@ -112,6 +112,7 @@ class ConversationViewController: UIViewController {
         present(navVC, animated: true)
     }
 
+    // create New Conversation
     private func createNewConversation(result: SearchResult) {
         let name = result.name
         let email = DatabaseManager.safeEmail(emailAddress: result.email)

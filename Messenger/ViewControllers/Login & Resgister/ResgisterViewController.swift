@@ -198,6 +198,7 @@ class ResgisterViewController: UIViewController {
         }
     }
     
+    // alerUserRegisterError
     func alerUserRegisterError() {
         let alert = UIAlertController(title: "Something Wrong", message: "Register Fail", preferredStyle: .alert)
         let action = UIAlertAction(title: "Dismiss", style: .cancel, handler: nil)
