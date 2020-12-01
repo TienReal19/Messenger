@@ -23,7 +23,7 @@ final class DatabaseManager {
 
 //MARK: - getDataFor function
 extension DatabaseManager {
-
+    
     /// Returns dictionary node at child path
     public func getDataFor(path: String, completion: @escaping (Result<Any, Error>) -> Void) {
         database.child("\(path)").observeSingleEvent(of: .value) { snapshot in
@@ -34,7 +34,7 @@ extension DatabaseManager {
             completion(.success(value))
         }
     }
-
+    
 }
 
 //MARK: - Account Management
@@ -46,29 +46,29 @@ extension DatabaseManager {
                 completion(false)
                 return
             }
-
+            
             completion(true)
         })
-
+        
     }
-
+    
     
     public func insertUser(with user: ChatAppUser, completion: @escaping (Bool) -> Void) {
         database.child(user.safeEmail).setValue([
             "first_name": user.firstName,
             "last_name": user.lastName
         ], withCompletionBlock: { [weak self] error, _ in
-
+            
             guard let strongSelf = self else {
                 return
             }
-
+            
             guard error == nil else {
                 print("failed ot write to database")
                 completion(false)
                 return
             }
-
+            
             strongSelf.database.child("users").observeSingleEvent(of: .value, with: { snapshot in
                 if var usersCollection = snapshot.value as? [[String: String]] {
                     // append to user dictionary
@@ -77,13 +77,13 @@ extension DatabaseManager {
                         "email": user.safeEmail
                     ]
                     usersCollection.append(newElement)
-
+                    
                     strongSelf.database.child("users").setValue(usersCollection, withCompletionBlock: { error, _ in
                         guard error == nil else {
                             completion(false)
                             return
                         }
-
+                        
                         completion(true)
                     })
                 }
@@ -95,13 +95,13 @@ extension DatabaseManager {
                             "email": user.safeEmail
                         ]
                     ]
-
+                    
                     strongSelf.database.child("users").setValue(newCollection, withCompletionBlock: { error, _ in
                         guard error == nil else {
                             completion(false)
                             return
                         }
-
+                        
                         completion(true)
                     })
                 }
@@ -115,14 +115,14 @@ extension DatabaseManager {
                 completion(.failure(DatabaseError.failedToFetch))
                 return
             }
-
+            
             completion(.success(value))
         })
     }
-
+    
     public enum DatabaseError: Error {
         case failedToFetch
-
+        
         public var localizedDescription: String {
             switch self {
             case .failedToFetch:
@@ -136,38 +136,38 @@ extension DatabaseManager {
 extension DatabaseManager {
     
     /*
-        "dfsdfdsfds" {
-            "messages": [
-                {
-                    "id": String,
-                    "type": text, photo, video,
-                    "content": String,
-                    "date": Date(),
-                    "sender_email": String,
-                    "isRead": true/false,
-                }
-            ]
-        }
-
-           conversaiton => [
-              [
-                  "conversation_id": "dfsdfdsfds"
-                  "other_user_email":
-                  "latest_message": => {
-                    "date": Date()
-                    "latest_message": "message"
-                    "is_read": true/false
-                  }
-              ],
-            ]
-           */
-
+     "dfsdfdsfds" {
+     "messages": [
+     {
+     "id": String,
+     "type": text, photo, video,
+     "content": String,
+     "date": Date(),
+     "sender_email": String,
+     "isRead": true/false,
+     }
+     ]
+     }
+     
+     conversaiton => [
+     [
+     "conversation_id": "dfsdfdsfds"
+     "other_user_email":
+     "latest_message": => {
+     "date": Date()
+     "latest_message": "message"
+     "is_read": true/false
+     }
+     ],
+     ]
+     */
+    
     
     // Creates a new conversation with target user emamil and first message sent
     public func createNewConversation(with otherUserEmail: String, name: String, firstMessage: Message, completion: @escaping (Bool) -> Void) {
         guard let currentEmail = UserDefaults.standard.value(forKey: "email") as? String,
-            let currentNamme = UserDefaults.standard.value(forKey: "name") as? String else {
-                return
+              let currentNamme = UserDefaults.standard.value(forKey: "name") as? String else {
+            return
         }
         
         let safeEmail = DatabaseManager.safeEmail(emailAddress: currentEmail)
@@ -183,7 +183,7 @@ extension DatabaseManager {
             let dateString = ChatViewController.dateFormatter.string(from: messageDate)
             
             var message = ""
-
+            
             switch firstMessage.kind {
             case .text(let messageText):
                 message = messageText
@@ -206,7 +206,7 @@ extension DatabaseManager {
             case .linkPreview(_):
                 break
             }
-
+            
             let conversationId = "conversation_\(firstMessage.messageId)"
             
             let newConversationData: [String: Any] = [
@@ -251,7 +251,7 @@ extension DatabaseManager {
                 
                 conversation.append(newConversationData)
                 userNode["conversation"] = conversation
-    
+                
                 ref.setValue(userNode) { [weak self] (error, _ ) in
                     guard error == nil else{
                         completion(false)
@@ -283,17 +283,17 @@ extension DatabaseManager {
         })
     }
     private func finishCreatingConversation(name: String, conversationID: String, firstMessage: Message, completion: @escaping (Bool) -> Void) {
-//        {
-//            "id": String,
-//            "type": text, photo, video,
-//            "content": String,
-//            "date": Date(),
-//            "sender_email": String,
-//            "isRead": true/false,
-//        }
+        //        {
+        //            "id": String,
+        //            "type": text, photo, video,
+        //            "content": String,
+        //            "date": Date(),
+        //            "sender_email": String,
+        //            "isRead": true/false,
+        //        }
         let messageDate = firstMessage.sentDate
         let dateString = ChatViewController.dateFormatter.string(from: messageDate)
-
+        
         var message = ""
         switch firstMessage.kind {
         case .text(let messageText):
@@ -317,14 +317,14 @@ extension DatabaseManager {
         case .linkPreview(_):
             break
         }
-
+        
         guard let myEmmail = UserDefaults.standard.value(forKey: "email") as? String else {
             completion(false)
             return
         }
-
+        
         let currentUserEmail = DatabaseManager.safeEmail(emailAddress: myEmmail)
-
+        
         let collectionMessage: [String: Any] = [
             "id": firstMessage.messageId,
             "type": firstMessage.kind.messageKindString,
@@ -334,15 +334,15 @@ extension DatabaseManager {
             "is_read": false,
             "name": name
         ]
-
+        
         let value: [String: Any] = [
             "messages": [
                 collectionMessage
             ]
         ]
-
+        
         print("adding convo: \(conversationID)")
-
+        
         database.child("\(conversationID)").setValue(value, withCompletionBlock: { error, _ in
             guard error == nil else {
                 completion(false)
@@ -362,15 +362,15 @@ extension DatabaseManager {
             
             let conversations: [Conversation] = value.compactMap({ dictionary in
                 guard let conversationId = dictionary["id"] as? String,
-                    let name = dictionary["name"] as? String,
-                    let otherUserEmail = dictionary["other_user_email"] as? String,
-                    let latestMessage = dictionary["latest_message"] as? [String: Any],
-                    let date = latestMessage["date"] as? String,
-                    let message = latestMessage["message"] as? String,
-                    let isRead = latestMessage["is_read"] as? Bool else {
-                        return nil
+                      let name = dictionary["name"] as? String,
+                      let otherUserEmail = dictionary["other_user_email"] as? String,
+                      let latestMessage = dictionary["latest_message"] as? [String: Any],
+                      let date = latestMessage["date"] as? String,
+                      let message = latestMessage["message"] as? String,
+                      let isRead = latestMessage["is_read"] as? Bool else {
+                    return nil
                 }
-
+                
                 let latestMmessageObject = LatestMessage(date: date,
                                                          text: message,
                                                          isRead: isRead)
@@ -714,13 +714,13 @@ extension DatabaseManager {
             return
         }
         let safeSenderEmail = DatabaseManager.safeEmail(emailAddress: senderEmail)
-
+        
         database.child("\(safeRecipientEmail)/conversations").observeSingleEvent(of: .value, with: { snapshot in
             guard let collection = snapshot.value as? [[String: Any]] else {
                 completion(.failure(DatabaseError.failedToFetch))
                 return
             }
-
+            
             // iterate and find conversation with target sender
             if let conversation = collection.first(where: {
                 guard let targetSenderEmail = $0["other_user_email"] as? String else {
@@ -736,7 +736,7 @@ extension DatabaseManager {
                 completion(.success(id))
                 return
             }
-
+            
             completion(.failure(DatabaseError.failedToFetch))
             return
         })

@@ -36,8 +36,8 @@ class NewConversationViewController: UIViewController {
         label.font = .systemFont(ofSize: 21, weight: .medium)
         return label
     }()
-
-
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -73,7 +73,7 @@ extension NewConversationViewController: UITableViewDelegate, UITableViewDataSou
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return results.count
     }
-
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let model = results[indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: NewConversationCell.identifier,
@@ -81,17 +81,17 @@ extension NewConversationViewController: UITableViewDelegate, UITableViewDataSou
         cell.configure(with: model)
         return cell
     }
-
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         // start conversation
         let targetUserData = results[indexPath.row]
-
+        
         dismiss(animated: true, completion: { [weak self] in
             self?.completion?(targetUserData)
         })
     }
-
+    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 90
     }
@@ -104,7 +104,7 @@ extension NewConversationViewController: UISearchBarDelegate {
             return
         }
         searchBar.resignFirstResponder()
-
+        
         results.removeAll()
         searchUsers(query: text)
     }
@@ -135,29 +135,29 @@ extension NewConversationViewController: UISearchBarDelegate {
         guard let currentUserEmail = UserDefaults.standard.value(forKey: "email") as? String, hasFetched else {
             return
         }
-
+        
         let safeEmail = DatabaseManager.safeEmail(emailAddress: currentUserEmail)
-
+        
         let results: [SearchResult] = users.filter({
             guard let email = $0["email"], email != safeEmail else {
                 return false
             }
-
+            
             guard let name = $0["name"]?.lowercased() else {
                 return false
             }
-
+            
             return name.hasPrefix(term.lowercased())
         })
         .compactMap({
             guard let email = $0["email"],
-                let name = $0["name"] else {
+                  let name = $0["name"] else {
                 return nil
             }
-
+            
             return SearchResult(name: name, email: email)
         })
-
+        
         self.results = results
         updateUI()
     }

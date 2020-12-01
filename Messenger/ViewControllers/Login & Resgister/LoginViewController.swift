@@ -90,10 +90,10 @@ class LoginViewController: UIViewController  {
             guard let strongSelf = self else {
                 return
             }
-
+            
             strongSelf.navigationController?.dismiss(animated: true, completion: nil)
         })
-
+        
         GIDSignIn.sharedInstance()?.presentingViewController = self
         
         view.backgroundColor = .white
@@ -155,12 +155,12 @@ class LoginViewController: UIViewController  {
                 switch result {
                 case .success(let data):
                     guard let userData = data as? [String: Any],
-                        let firstName = userData["first_name"] as? String,
-                        let lastName = userData["last_name"] as? String else {
-                            return
+                          let firstName = userData["first_name"] as? String,
+                          let lastName = userData["last_name"] as? String else {
+                        return
                     }
                     UserDefaults.standard.set("\(firstName) \(lastName)", forKey: "name")
-
+                    
                 case .failure(let error):
                     print("Failed to read data with error \(error)")
                 }
@@ -220,18 +220,18 @@ extension LoginViewController: LoginButtonDelegate {
                 return
             }
             guard let firstName = result["first_name"] as? String,
-                let lastName = result["last_name"] as? String,
-                let email = result["email"] as? String,
-                let picture = result["picture"] as? [String: Any],
-                let data = picture["data"] as? [String: Any],
-                let pictureUrl = data["url"] as? String else {
-                    print("Faield to get email and name from fb result")
-                    return
+                  let lastName = result["last_name"] as? String,
+                  let email = result["email"] as? String,
+                  let picture = result["picture"] as? [String: Any],
+                  let data = picture["data"] as? [String: Any],
+                  let pictureUrl = data["url"] as? String else {
+                print("Faield to get email and name from fb result")
+                return
             }
-
+            
             UserDefaults.standard.set(email, forKey: "email")
             UserDefaults.standard.set("\(firstName) \(lastName)", forKey: "name")
-
+            
             DatabaseManager.shared.userExists(with: email) { (exists) in
                 if !exists {
                     let chatUser = ChatAppUser(firstName: firstName,
@@ -243,17 +243,17 @@ extension LoginViewController: LoginButtonDelegate {
                             guard let url = URL(string: pictureUrl) else {
                                 return
                             }
-
+                            
                             print("Downloading data from facebook image")
-
+                            
                             URLSession.shared.dataTask(with: url, completionHandler: { data, _,_ in
                                 guard let data = data else {
                                     print("Failed to get data from facebook")
                                     return
                                 }
-
+                                
                                 print("got data from FB, uploading...")
-
+                                
                                 // upload iamge
                                 let filename = chatUser.profilePictureFileName
                                 StorageManager.shared.uploadProfilePicture(with: data, filename: filename, completion: { result in

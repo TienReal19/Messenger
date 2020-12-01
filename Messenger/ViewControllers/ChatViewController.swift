@@ -386,9 +386,9 @@ extension ChatViewController: InputBarAccessoryViewDelegate {
     
     func inputBar(_ inputBar: InputBarAccessoryView, didPressSendButtonWith text: String) {
         guard !text.replacingOccurrences(of: " ", with: "").isEmpty,
-            let selfSender = self.selfSender,
-            let messageId = createMessageId() else {
-                return
+              let selfSender = self.selfSender,
+              let messageId = createMessageId() else {
+            return
         }
         print("Sending \(text)")
         
@@ -396,7 +396,7 @@ extension ChatViewController: InputBarAccessoryViewDelegate {
                                messageId: messageId,
                                sentDate: Date(),
                                kind: .text(text))
-
+        
         //send message
         if isNewConversation {
             DatabaseManager.shared.createNewConversation(with: otherUserEmail, name: self.title ?? "User", firstMessage: mmessage, completion: { [weak self] success in
@@ -434,13 +434,13 @@ extension ChatViewController: InputBarAccessoryViewDelegate {
         guard let currentUserEmail = UserDefaults.standard.value(forKey: "email") as? String else {
             return nil
         }
-
+        
         let safeCurrentEmail = DatabaseManager.safeEmail(emailAddress: currentUserEmail)
         let dateString = Self.dateFormatter.string(from: Date())
         let newIdentifier = "\(otherUserEmail)_\(safeCurrentEmail)_\(dateString)"
-
+        
         print("created message id: \(newIdentifier)")
-
+        
         return newIdentifier
     }
 }
@@ -469,7 +469,7 @@ extension ChatViewController: MessagesDataSource, MessagesLayoutDelegate, Messag
         guard let message = message as? Message else {
             return
         }
-
+        
         switch message.kind {
         case .photo(let media):
             guard let imageUrl = media.url else {
@@ -488,9 +488,9 @@ extension ChatViewController: MessageCellDelegate {
         guard let indexPath = messagesCollectionView.indexPath(for: cell) else {
             return
         }
-
+        
         let message = messages[indexPath.section]
-
+        
         switch message.kind {
         case .location(let locationData):
             let coordinates = locationData.location.coordinate
@@ -506,9 +506,9 @@ extension ChatViewController: MessageCellDelegate {
         guard let indexPath = messagesCollectionView.indexPath(for: cell) else {
             return
         }
-
+        
         let message = messages[indexPath.section]
-
+        
         switch message.kind {
         case .photo(let media):
             guard let imageUrl = media.url else {
@@ -520,7 +520,7 @@ extension ChatViewController: MessageCellDelegate {
             guard let videoUrl = media.url else {
                 return
             }
-
+            
             let vc = AVPlayerViewController()
             vc.player = AVPlayer(url: videoUrl)
             present(vc, animated: true)

@@ -126,7 +126,7 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return data.count
     }
-
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let viewModel = data[indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: ProfileTableViewCell.identifier,
@@ -134,7 +134,7 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
         cell.setUp(with: viewModel)
         return cell
     }
-
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         data[indexPath.row].handler?()
@@ -144,9 +144,9 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
 
 // ProfileTableViewCell
 class ProfileTableViewCell: UITableViewCell {
-
+    
     static let identifier = "ProfileTableViewCell"
-
+    
     public func setUp(with viewModel: ProfileViewModel) {
         self.textLabel?.text = viewModel.title
         switch viewModel.viewModelType {
@@ -158,5 +158,5 @@ class ProfileTableViewCell: UITableViewCell {
             textLabel?.textAlignment = .center
         }
     }
-
+    
 }

@@ -31,7 +31,7 @@ class ConversationViewController: UIViewController {
     }()
     
     private var loginObserver: NSObjectProtocol?
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .compose,
@@ -46,7 +46,7 @@ class ConversationViewController: UIViewController {
             guard let strongSelf = self else {
                 return
             }
-        
+            
             strongSelf.startListeningForCOnversations()
         })
     }
@@ -111,7 +111,7 @@ class ConversationViewController: UIViewController {
         let navVC = UINavigationController(rootViewController: vc)
         present(navVC, animated: true)
     }
-
+    
     // create New Conversation
     private func createNewConversation(result: SearchResult) {
         let name = result.name
@@ -195,7 +195,7 @@ extension ConversationViewController: UITableViewDelegate, UITableViewDataSource
         let model = conversations[indexPath.row]
         openConversation(model)
     }
-
+    
     func openConversation(_ model: Conversation) {
         let vc = ChatViewController(with: model.otherUserEmail, id: model.id)
         vc.title = model.name
@@ -210,7 +210,7 @@ extension ConversationViewController: UITableViewDelegate, UITableViewDataSource
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
         return .delete
     }
-
+    
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             // begin delete
@@ -218,7 +218,7 @@ extension ConversationViewController: UITableViewDelegate, UITableViewDataSource
             tableView.beginUpdates()
             self.conversations.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .left)
-
+            
             DatabaseManager.shared.deleteConversation(conversationId: conversationId, completion: { success in
                 if !success {
                     // add model and row back and show error alert
