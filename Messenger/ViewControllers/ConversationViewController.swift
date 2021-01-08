@@ -40,7 +40,6 @@ class ConversationViewController: UIViewController {
         view.addSubview(tableView)
         view.addSubview(noConversationLabel)
         setUpTableView()
-        fetchConversation()
         startListeningForCOnversations()
         loginObserver = NotificationCenter.default.addObserver(forName: .didlogInNotification, object: nil, queue: .main, using: { [weak self] _ in
             guard let strongSelf = self else {
@@ -92,9 +91,9 @@ class ConversationViewController: UIViewController {
             guard let strongSelf = self else {
                 return
             }
-            
+
             let currentConversations = strongSelf.conversations
-            
+
             if let targetConversation = currentConversations.first(where: {
                 $0.otherUserEmail == DatabaseManager.safeEmail(emailAddress: result.email)
             }) {
@@ -116,16 +115,11 @@ class ConversationViewController: UIViewController {
     private func createNewConversation(result: SearchResult) {
         let name = result.name
         let email = DatabaseManager.safeEmail(emailAddress: result.email)
-        
+
         // check in datbase if conversation with these two users exists
         // if it does, reuse conversation id
         // otherwise use existing code
-        
-        let vc = ChatViewController(with: email, id: nil)
-        vc.isNewConversation = true
-        vc.title = name
-        vc.navigationItem.largeTitleDisplayMode = .never
-        navigationController?.pushViewController(vc, animated: true)
+
         DatabaseManager.shared.conversationExists(iwth: email, completion: { [weak self] result in
             guard let strongSelf = self else {
                 return
@@ -150,6 +144,10 @@ class ConversationViewController: UIViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         tableView.frame = view.bounds
+        noConversationLabel.frame = CGRect(x: 10,
+                                            y: (view.heigh-100)/2,
+                                            width: view.width-20,
+                                            height: 100)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -169,10 +167,6 @@ class ConversationViewController: UIViewController {
     func setUpTableView() {
         tableView.delegate = self
         tableView.dataSource = self
-    }
-    
-    func fetchConversation() {
-        tableView.isHidden = false
     }
 }
 
@@ -225,7 +219,6 @@ extension ConversationViewController: UITableViewDelegate, UITableViewDataSource
                 }
             })
             tableView.endUpdates()
-            tableView.reloadData()
         }
     }
 }

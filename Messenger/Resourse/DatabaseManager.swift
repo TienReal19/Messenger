@@ -52,7 +52,6 @@ extension DatabaseManager {
         
     }
     
-    
     public func insertUser(with user: ChatAppUser, completion: @escaping (Bool) -> Void) {
         database.child(user.safeEmail).setValue([
             "first_name": user.firstName,
@@ -245,12 +244,12 @@ extension DatabaseManager {
             })
             
             // Update current user conversation entry
-            if var conversation = userNode["conversation"] as? [[String : Any]] {
+            if var conversation = userNode["conversations"] as? [[String : Any]] {
                 // conversation array exist for current user
                 // you sould append
                 
                 conversation.append(newConversationData)
-                userNode["conversation"] = conversation
+                userNode["conversations"] = conversation
                 
                 ref.setValue(userNode) { [weak self] (error, _ ) in
                     guard error == nil else{
@@ -265,7 +264,7 @@ extension DatabaseManager {
                 // conversation does not exist
                 // create it
                 
-                userNode["conversation"] = [
+                userNode["conversations"] = [
                     newConversationData
                 ]
                 ref.setValue(userNode) { [weak self] (error, _ ) in
@@ -354,7 +353,7 @@ extension DatabaseManager {
     
     // Fetches and returns all conversations for the user with passed in email
     public func getAllConversations(for email: String, completion: @escaping (Result<[Conversation], Error>) -> Void) {
-        database.child("\(email)/conversation").observe(.value, with: { snapshot in
+        database.child("\(email)/conversations").observe(.value, with: { snapshot in
             guard let value = snapshot.value as? [[String: Any]] else{
                 completion(.failure(DatabaseError.failedToFetch))
                 return

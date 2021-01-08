@@ -13,59 +13,62 @@ import AVFoundation
 import AVKit
 import CoreLocation
 
-struct Message: MessageType {
-    public var sender: SenderType
-    public var messageId: String
-    public var sentDate: Date
-    public var kind: MessageKind
-}
-
-extension MessageKind {
-    var messageKindString: String {
-        switch self {
-        case .text(_):
-            return "text"
-        case .attributedText(_):
-            return "attributed_text"
-        case .photo(_):
-            return "photo"
-        case .video(_):
-            return "video"
-        case .location(_):
-            return "location"
-        case .emoji(_):
-            return "emoji"
-        case .audio(_):
-            return "audio"
-        case .contact(_):
-            return "contact"
-        case .custom(_):
-            return "customc"
-        case .linkPreview(_):
-            return "linkPreview"
-        }
-    }
-}
-
-struct Sender : SenderType {
-    public var photoURL: String
-    public var senderId: String
-    public var displayName: String
-}
-
-struct Media: MediaItem {
-    var url: URL?
-    var image: UIImage?
-    var placeholderImage: UIImage
-    var size: CGSize
-}
-
-struct Location: LocationItem {
-    var location: CLLocation
-    var size: CGSize
-}
+//struct Message: MessageType {
+//    public var sender: SenderType
+//    public var messageId: String
+//    public var sentDate: Date
+//    public var kind: MessageKind
+//}
+//
+//extension MessageKind {
+//    var messageKindString: String {
+//        switch self {
+//        case .text(_):
+//            return "text"
+//        case .attributedText(_):
+//            return "attributed_text"
+//        case .photo(_):
+//            return "photo"
+//        case .video(_):
+//            return "video"
+//        case .location(_):
+//            return "location"
+//        case .emoji(_):
+//            return "emoji"
+//        case .audio(_):
+//            return "audio"
+//        case .contact(_):
+//            return "contact"
+//        case .custom(_):
+//            return "customc"
+//        case .linkPreview(_):
+//            return "linkPreview"
+//        }
+//    }
+//}
+//
+//struct Sender : SenderType {
+//    public var photoURL: String
+//    public var senderId: String
+//    public var displayName: String
+//}
+//
+//struct Media: MediaItem {
+//    var url: URL?
+//    var image: UIImage?
+//    var placeholderImage: UIImage
+//    var size: CGSize
+//}
+//
+//struct Location: LocationItem {
+//    var location: CLLocation
+//    var size: CGSize
+//}
 
 class ChatViewController: MessagesViewController {
+    
+    private var senderPhotoURL: URL?
+    private var otherUserPhotoURL: URL?
     
     public static let dateFormatter: DateFormatter = {
         let formattre = DateFormatter()
@@ -479,6 +482,77 @@ extension ChatViewController: MessagesDataSource, MessagesLayoutDelegate, Messag
         default:
             break
         }
+    }
+    
+    func backgroundColor(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UIColor {
+        let sender = message.sender
+        if sender.senderId == selfSender?.senderId {
+            return .link
+        }
+        
+        return .lightGray
+    }
+    
+    func configureAvatarView(_ avatarView: AvatarView, for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {
+
+        let sender = message.sender
+
+        if sender.senderId == selfSender?.senderId {
+            // show our image
+            if let currentUserImageURL = self.senderPhotoURL {
+                avatarView.sd_setImage(with: currentUserImageURL, completed: nil)
+            }
+            else {
+                // images/safeemail_profile_picture.png
+
+                guard let email = UserDefaults.standard.value(forKey: "email") as? String else {
+                    return
+                }
+
+                let safeEmail = DatabaseManager.safeEmail(emailAddress: email)
+                let path = "image\(safeEmail)_profile_picture.png"
+
+                // fetch url
+                StorageManager.shared.downloadURL(for: path, completion: { [weak self] result in
+                    switch result {
+                    case .success(let url):
+                        self?.senderPhotoURL = url
+                        DispatchQueue.main.async {
+                            avatarView.sd_setImage(with: url, completed: nil)
+                        }
+                    case .failure(let error):
+                        print("\(error)")
+                    }
+                })
+            }
+        }
+        else {
+            // other user image
+            if let otherUsrePHotoURL = self.otherUserPhotoURL {
+                avatarView.sd_setImage(with: otherUsrePHotoURL, completed: nil)
+            }
+            else {
+                // fetch url
+                let email = self.otherUserEmail
+
+                let safeEmail = DatabaseManager.safeEmail(emailAddress: email)
+                let path = "image\(safeEmail)_profile_picture.png"
+
+                // fetch url
+                StorageManager.shared.downloadURL(for: path, completion: { [weak self] result in
+                    switch result {
+                    case .success(let url):
+                        self?.otherUserPhotoURL = url
+                        DispatchQueue.main.async {
+                            avatarView.sd_setImage(with: url, completed: nil)
+                        }
+                    case .failure(let error):
+                        print("\(error)")
+                    }
+                })
+            }
+        }
+
     }
 }
 

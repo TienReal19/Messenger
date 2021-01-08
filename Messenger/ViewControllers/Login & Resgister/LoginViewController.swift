@@ -200,25 +200,31 @@ extension LoginViewController: UITextFieldDelegate {
 //MARK: - facebook LoginButtonDelegate
 extension LoginViewController: LoginButtonDelegate {
     func loginButtonDidLogOut(_ loginButton: FBLoginButton) {
-        // something
+        // no operation
     }
+    
     func loginButton(_ loginButton: FBLoginButton, didCompleteWith result: LoginManagerLoginResult?, error: Error?) {
         guard let token = result?.token?.tokenString else {
-            print("fail to login with Facabook")
+            print("User failed to log in with facebook")
             return
         }
         
-        let facebookReguest = FBSDKLoginKit.GraphRequest(graphPath: "me", parameters: ["fields":
-                                                                                        "email, first_name, last_name, picture.type(large)"],
+        let facebookRequest = FBSDKLoginKit.GraphRequest(graphPath: "me",
+                                                         parameters: ["fields":
+                                                                        "email, first_name, last_name, picture.type(large)"],
                                                          tokenString: token,
                                                          version: nil,
                                                          httpMethod: .get)
         
-        facebookReguest.start { (_, result, error) in
-            guard let result = result as? [String: Any], error == nil else {
-                print("fail to graph request")
+        facebookRequest.start(completionHandler: { _, result, error in
+            guard let result = result as? [String: Any],
+                  error == nil else {
+                print("Failed to make facebook graph request")
                 return
             }
+            
+            print(result)
+            
             guard let firstName = result["first_name"] as? String,
                   let lastName = result["last_name"] as? String,
                   let email = result["email"] as? String,
@@ -232,14 +238,14 @@ extension LoginViewController: LoginButtonDelegate {
             UserDefaults.standard.set(email, forKey: "email")
             UserDefaults.standard.set("\(firstName) \(lastName)", forKey: "name")
             
-            DatabaseManager.shared.userExists(with: email) { (exists) in
+            DatabaseManager.shared.userExists(with: email, completion: { exists in
                 if !exists {
                     let chatUser = ChatAppUser(firstName: firstName,
                                                lastName: lastName,
                                                emailAddress: email)
                     DatabaseManager.shared.insertUser(with: chatUser, completion: { success in
                         if success {
-                            //upload image
+                            
                             guard let url = URL(string: pictureUrl) else {
                                 return
                             }
@@ -269,20 +275,24 @@ extension LoginViewController: LoginButtonDelegate {
                         }
                     })
                 }
-            }
+            })
             
             let credential = FacebookAuthProvider.credential(withAccessToken: token)
-            FirebaseAuth.Auth.auth().signIn(with: credential) { [weak self] (authResult, error) in
+            FirebaseAuth.Auth.auth().signIn(with: credential, completion: { [weak self] authResult, error in
                 guard let strongSelf = self else {
                     return
                 }
+                
                 guard authResult != nil, error == nil else {
-                    print("Facebook credential login failed, MFA may be needed - \(String(describing: error))")
+                    if let error = error {
+                        print("Facebook credential login failed, MFA may be needed - \(error)")
+                    }
                     return
                 }
-                print("log in via Facabook successfull")
+                
+                print("Successfully logged user in")
                 strongSelf.navigationController?.dismiss(animated: true, completion: nil)
-            }
-        }
+            })
+        })
     }
 }

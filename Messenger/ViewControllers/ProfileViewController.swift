@@ -80,6 +80,10 @@ class ProfileViewController: UIViewController {
         tableview.tableHeaderView = createTableHeader()
     }
     
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+    }
+    
     // Create tableHeader in to show user's profile
     func createTableHeader() -> UIView? {
         guard let email = UserDefaults.standard.value(forKey: "email") as? String else {

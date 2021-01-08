@@ -12,8 +12,7 @@ class NewConversationViewController: UIViewController {
     public var completion: ((SearchResult) -> (Void))?
     private var users = [[String: String]]()
     private var results = [SearchResult]()
-    private var hasFetched = false
-    
+    private var hasFetched = false  
     private var searchBar : UISearchBar = {
         let searchbar = UISearchBar()
         searchbar.placeholder = "Search for users....."
